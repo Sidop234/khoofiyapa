@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="804.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileScreenController">
    <center>
@@ -23,30 +28,35 @@
             <AnchorPane prefHeight="83.0" prefWidth="804.0" />
             <FlowPane prefHeight="441.0" prefWidth="804.0">
                <children>
-                  <TabPane prefHeight="416.0" prefWidth="642.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane prefHeight="416.0" prefWidth="413.0" tabClosingPolicy="UNAVAILABLE">
                      <tabs>
-                        <Tab text="Encrypt">
+                        <Tab fx:id="encryptTab" onSelectionChanged="#switchToFolderItem" text="Encrypt">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="337.0" prefWidth="583.0" style="-fx-border-color: black;">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="457.0" style="-fx-border-color: black;">
                                  <children>
                                     <MenuBar layoutY="1.0" prefHeight="25.0" prefWidth="642.0">
                                       <menus>
                                         <Menu mnemonicParsing="false" text="File">
                                           <items>
-                                                <Menu mnemonicParsing="false" text="Open">
-                                                  <items>
-                                                    <MenuItem fx:id="fileMenuItem" mnemonicParsing="false" text="File" />
-                                                      <MenuItem fx:id="folderMenuItem" mnemonicParsing="false" text="Folder" />
-                                                  </items>
-                                                </Menu>
                                               <Menu mnemonicParsing="false" text="Algorithm">
                                                 <items>
                                                   <MenuItem fx:id="aesAlgoMenuItem" mnemonicParsing="false" text="AES" />
-                                                      <MenuItem fx:id="desAlgoMenuItem" mnemonicParsing="false" text="DES" />
+                                                      <MenuItem fx:id="desAlgoMenuItem" mnemonicParsing="false" text="3DES" />
                                                       <MenuItem fx:id="rsaAlgoMenuItem" mnemonicParsing="false" text="RSA" />
                                                 </items>
                                               </Menu>
-                                                <MenuItem fx:id="refreshMenuItem" mnemonicParsing="false" text="Refresh..." />
+                                                <MenuItem fx:id="refreshMenuItem" mnemonicParsing="false" onAction="#refresh" text="Refresh..." />
+                                                <Menu mnemonicParsing="false" text="Settings">
+                                                  <items>
+                                                      <Menu mnemonicParsing="false" text="Private Key">
+                                                        <items>
+                                                            <CheckMenuItem fx:id="customCheckMenuItem" mnemonicParsing="false" text="Custom..." />
+                                                            <CheckMenuItem fx:id="generatedCheckMenuItem" mnemonicParsing="false" text="Generated..." />
+                                                        </items>
+                                                      </Menu>
+                                                      <MenuItem fx:id="encryptionSettingMenuItem" mnemonicParsing="false" text="Encryption" />
+                                                  </items>
+                                                </Menu>
                                           </items>
                                         </Menu>
                                         <Menu mnemonicParsing="false" text="Help">
@@ -56,24 +66,46 @@
                                         </Menu>
                                       </menus>
                                     </MenuBar>
-                                    <Label fx:id="algoLabel" layoutX="318.0" layoutY="116.0" prefHeight="43.0" prefWidth="250.0" text="Label" />
-                                    <Label fx:id="fileLabel" layoutX="318.0" layoutY="159.0" prefHeight="43.0" prefWidth="250.0" text="Label" />
-                                    <Button fx:id="encryptButton" layoutX="318.0" layoutY="202.0" mnemonicParsing="false" text="Encrypt" />
+                                    <Label fx:id="folderPathLabel" layoutX="14.0" layoutY="266.0" prefHeight="43.0" prefWidth="394.0">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font></Label>
+                                    <Button fx:id="encryptButton" layoutX="14.0" layoutY="310.0" mnemonicParsing="false" onAction="#encryptFile" text="Encrypt" />
+                                    <PasswordField fx:id="privateKeyField" layoutX="182.0" layoutY="347.0" />
+                                    <PasswordField fx:id="confirmPrivateKeyField" layoutX="14.0" layoutY="347.0" />
+                                    <Button fx:id="browseFilesButton" layoutX="89.0" layoutY="310.0" mnemonicParsing="false" onAction="#openFileChooser" prefHeight="25.0" prefWidth="49.0" text="FIle" />
+                                    <Button fx:id="browseFolderButton" layoutX="157.0" layoutY="310.0" mnemonicParsing="false" onAction="#openFolderChooser" text="Folder" />
+                                    <AnchorPane layoutX="61.0" layoutY="26.0" prefHeight="200.0" prefWidth="291.0" style="-fx-background-color: white; -fx-border-color: black;">
+                                       <children>
+                                          <ImageView fx:id="currentFileIconImageView" fitHeight="117.0" fitWidth="107.0" layoutX="92.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="nextFileIconImageView" fitHeight="44.0" fitWidth="41.0" layoutX="236.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Button fx:id="previousIconButton" layoutX="165.0" layoutY="161.0" mnemonicParsing="false" onAction="#previousBrowsedFile" text="left" />
+                                          <Button fx:id="nextIconButton" layoutX="227.0" layoutY="161.0" mnemonicParsing="false" onAction="#nextBrowsedFile" text="right" />
+                                          <ImageView fx:id="previousFileIconImageView" fitHeight="44.0" fitWidth="41.0" layoutX="18.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ComboBox fx:id="algoComboBox" layoutX="18.0" layoutY="161.0" prefHeight="25.0" prefWidth="99.0" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </AnchorPane>
                            </content>
                         </Tab>
-                        <Tab text="Decrypt">
+                        <Tab fx:id="decryptTab" onSelectionChanged="#switchToRootItem" text="Decrypt">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="423.0" prefWidth="583.0">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="273.0" prefWidth="642.0">
                                  <children>
-                                    <TextField layoutX="26.0" layoutY="14.0" prefHeight="27.0" prefWidth="503.0" />
-                                    <ScrollPane layoutX="26.0" layoutY="56.0" prefHeight="317.0" prefWidth="590.0">
-                                       <content>
-                                          <FlowPane maxWidth="586.0" prefHeight="280.0" prefWidth="586.0" />
-                                       </content>
-                                    </ScrollPane>
-                                    <Button layoutX="539.0" layoutY="15.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Button" />
+                                    <TextField fx:id="searchField" layoutX="26.0" layoutY="14.0" prefHeight="27.0" prefWidth="281.0" />
+                                    <Button fx:id="listViewToggleButton" layoutX="307.0" layoutY="15.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Toggle" />
+                                    <ListView fx:id="searchResultListView" layoutX="26.0" layoutY="40.0" prefHeight="83.0" prefWidth="281.0" />
+                                    <Button fx:id="shareDecryptedFileButton" layoutX="298.0" layoutY="224.0" mnemonicParsing="false" onAction="#toggleShareOptionAnchorPane" prefHeight="25.0" prefWidth="57.33333" text="Share" />
+                                    <AnchorPane fx:id="shareOptionAnchorPane" layoutX="57.0" layoutY="275.0" prefHeight="89.0" prefWidth="299.0">
+                                       <children>
+                                          <Button fx:id="shareViaWhatsappButton" layoutX="41.0" layoutY="20.0" mnemonicParsing="false" onAction="#shareViaWhatsapp" prefHeight="37.0" prefWidth="83.0" text="Whatsapp" />
+                                          <Button fx:id="shareViaMailButton" layoutX="172.0" layoutY="20.0" mnemonicParsing="false" onAction="#shareViaMail" prefHeight="37.0" prefWidth="83.0" text="Gmail" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Button fx:id="decryptFileButton" layoutX="57.0" layoutY="224.0" mnemonicParsing="false" onAction="#decryptFile" text="Decrypt" />
+                                    <Button layoutX="181.0" layoutY="224.0" mnemonicParsing="false" prefWidth="57.33333" text="Edit" />
+                                    <Label fx:id="encryptedFileLabel" layoutX="35.0" layoutY="176.0" prefHeight="17.0" prefWidth="307.0" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -85,25 +117,12 @@
                         </Tab>
                      </tabs>
                   </TabPane>
-                  <VBox prefHeight="416.0" prefWidth="162.0">
+                  <AnchorPane prefHeight="416.0" prefWidth="390.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="169.0" text="History" />
-                        <Accordion prefHeight="426.0" prefWidth="162.0">
-                          <panes>
-                            <TitledPane animated="false" text="Encrypted">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                            <TitledPane animated="false" text="Decrypted">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                          </panes>
-                        </Accordion>
+                        <TreeView fx:id="rootFolderTreeView" layoutX="7.0" layoutY="49.0" prefHeight="200.0" prefWidth="375.0" style="-fx-border-color: black;" />
+                        <ProgressIndicator fx:id="treeViewProgress" layoutX="182.0" layoutY="119.0" progress="0.0" />
                      </children>
-                  </VBox>
+                  </AnchorPane>
                </children>
             </FlowPane>
             <AnchorPane prefHeight="79.0" prefWidth="804.0" />

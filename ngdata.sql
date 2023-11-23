@@ -1,0 +1,1 @@
+insert into params values('rootFolderPath',null);

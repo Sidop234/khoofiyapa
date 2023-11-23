@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileScreenController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="155.0" layoutY="151.0" prefHeight="17.0" prefWidth="289.0" text="Enter path" />
+            <TextField fx:id="rootFolderPathField" layoutX="76.0" layoutY="197.0" prefHeight="25.0" prefWidth="426.0" />
+            <Button fx:id="rootFolderBrowseButton" layoutX="512.0" layoutY="197.0" mnemonicParsing="false" text="Browse" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
